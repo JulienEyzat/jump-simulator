@@ -41,9 +41,10 @@ def create_radio(label, id, radio_labels, radio_values, init_value):
     ])
     return radio
 
-def create_app_layout(app):
-    app.layout = html.Div([
+def create_app_layout():
+    app_layout = html.Div([
         html.Div([
+            html.H1("Updates the following variables"),
             create_radio("Is Air", "is-air", ("yes", "no"), ("True", "False"), "True"),
             create_slider("Speed of jump (m/s)", "vx0-slider", 0, 15, 2),
             create_slider("Height of jump (m)", "y0-slider", 0, 15, 10),
@@ -55,7 +56,7 @@ def create_app_layout(app):
         dcc.Graph(id='graph-with-slider')
     ], style={'display': 'flex', 'flex-direction': 'row'})
 
-    return app
+    return app_layout
 
 @app.callback(
     Output('graph-with-slider', 'figure'),
@@ -92,7 +93,6 @@ def update_figure(selected_is_air, selected_vx0, selected_y0, selected_windxdir,
 
     return fig
 
-
+app.layout = create_app_layout()
 if __name__ == '__main__':
-    app = create_app_layout(app)
     app.run_server(debug=True)
