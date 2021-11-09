@@ -1,0 +1,1 @@
+web: gunicorn jump_simulator:server
