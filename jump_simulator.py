@@ -24,8 +24,7 @@ def create_slider(label, id, min_value, max_value, init_value):
             min=min_value,
             max=max_value,
             value=init_value,
-            marks={str(vx): str(vx) for vx in range(min_value, max_value, mark_step)},
-            step=None
+            marks={str(vx): str(vx) for vx in range(min_value, max_value+1, mark_step)},
         )
     ])
     return slider
@@ -46,12 +45,12 @@ def create_app_layout():
         html.Div([
             html.H1("Updates the following variables"),
             create_radio("Is Air", "is-air", ("yes", "no"), ("True", "False"), "True"),
-            create_slider("Speed of jump (m/s)", "vx0-slider", 0, 15, 2),
+            create_slider("Speed of jump (km/h)", "vx0-slider", 0, 25, 5),
             create_slider("Height of jump (m)", "y0-slider", 0, 15, 10),
             create_radio("Wind direction on x", "windxdir-radio", ("push", "pull"), (1, -1), 1),
-            create_slider("Speed of wind in x direction (m/s)", "windx-slider", 0, 100, 0),
+            create_slider("Speed of wind in x direction (km/h)", "windx-slider", 0, 100, 0),
             create_radio("Wind direction on y", "windydir-radio", ("up", "down"), (1, -1), 1),
-            create_slider("Speed of wind in y direction (m/s)", "windy-slider", 0, 100, 0)
+            create_slider("Speed of wind in y direction (km/h)", "windy-slider", 0, 100, 0)
         ]),
         dcc.Graph(id='graph-with-slider')
     ], style={'display': 'flex', 'flex-direction': 'row'})
@@ -71,12 +70,12 @@ def create_app_layout():
 def update_figure(selected_is_air, selected_vx0, selected_y0, selected_windxdir, selected_windx, selected_windydir, selected_windy):
     is_air = selected_is_air == "True"
     input_constants = {
-        "vx0": selected_vx0,
+        "vx0": simulator.kmph_to_mps(selected_vx0),
         "y0": selected_y0,
         "windx_dir": selected_windxdir,
-        "windx": selected_windx,
+        "windx": simulator.kmph_to_mps(selected_windx),
         "windy_dir": selected_windydir,
-        "windy": selected_windy
+        "windy": simulator.kmph_to_mps(selected_windy)
     }
     ts, xs, ys = simulator.simulator(input_constants, is_air)
 

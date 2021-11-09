@@ -97,6 +97,9 @@ def get_jumped_distance(ts, constants):
     
     return xs[np.where(ys == np.min(np.abs(ys)))][0]
 
+def kmph_to_mps(speed):
+    return speed/3.6
+
 def simulator(input_constants, is_air):
     constants = get_constants()
     constants = update_constants(input_constants, constants)
